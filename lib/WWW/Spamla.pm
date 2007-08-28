@@ -6,7 +6,7 @@ use LWP::UserAgent;
 use HTML::TableExtract;
 use HTML::TokeParser;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use constant DEBUG => $ENV{ WWW_SPAMLA_DEBUG } || 0;
 use constant BASE_URI => URI->new( 'http://spam.la/' );
@@ -185,8 +185,8 @@ which provide accessors to data B<id>, B<to>, B<from>, B<subject>.
 =item my @message = $la->B<message>( $id )
 
 Given a message id, fetches and returns the corresponding MIME message. It can 
-then be parsed by any MIME handler, like Email::MIME or MIME::Parser.  Returns 
-undef if an error occurred.
+then be parsed by any MIME handler, like L<Email::MIME> or L<MIME::Parser>.  
+Returns undef if an error occurred.
 
 =item my $error = $la->B<error>
 

@@ -12,7 +12,7 @@ WriteMakefile(
         'Class::Accessor::Fast' => 0,
         'HTML::TableExtract'    => 0,
         'HTML::TokeParser'      => 0,
-        'LWP::UserAGent'        => 0,
+        'LWP::UserAgent'        => 0,
         'Test::More'            => 0,
     },
     dist          => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

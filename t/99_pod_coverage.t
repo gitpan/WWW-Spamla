@@ -1,7 +1,7 @@
 use strict;
 use Test::More;
 
-if ( ($ENV{CPAN_AUTHOR_TESTS}||'') !~ /\bWWW::Spamlaa\b/ ) {
+if ( ($ENV{CPAN_AUTHOR_TESTS}||'') !~ /\bWWW::Spamla\b/ ) {
     plan skip_all => 'author tests';
 }
 

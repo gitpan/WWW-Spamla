@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:                WWW-Spamla
-version:             0.01
+version:             0.02
 abstract:            interface to Spam.la
 license:             perl
 generated_by:        ExtUtils::MakeMaker version 6.36
@@ -9,7 +9,7 @@ requires:
     Class::Accessor::Fast:         0
     HTML::TableExtract:            0
     HTML::TokeParser:              0
-    LWP::UserAGent:                0
+    LWP::UserAgent:                0
     Test::More:                    0
 meta-spec:
     url:     http://module-build.sourceforge.net/META-spec-v1.2.html
