@@ -2,11 +2,12 @@ package WWW::Spamla;
 
 use strict;
 use base qw( Class::Accessor::Fast );
+
 use LWP::UserAgent;
 use HTML::TableExtract;
 use HTML::TokeParser;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use constant DEBUG => $ENV{ WWW_SPAMLA_DEBUG } || 0;
 use constant BASE_URI => URI->new( 'http://spam.la/' );
@@ -56,7 +57,7 @@ sub list {
         headers => [ 'To', 'From', 'Click Subject To Read Email' ],
         keep_html => 1,
     );
-    $te->parse( $res->content );
+    $te->parse( $res->content_ref );
 
     my $table = $te->first_table_found or do {
         $self->{error} = q(No messages table found);
@@ -170,25 +171,25 @@ The C<WWW::Spamla> module provides an interface to the Spam.la website.
 
 =item $la = WWW::Spamla->B<new>( ua => $ua )
 
-Creates a new WWW::Spamla object. The constructor will accept an optional
+Creates a new WWW::Spamla object. The constructor accepts an optional 
 LWP::UserAgent derived object.
 
-=item my @list = $la->B<list>
+=item @list = $la->B<list>
 
-=item my @list = $la->B<list>( address => $address, start_id => $id )
+=item @list = $la->B<list>( address => $address, start_id => $id )
 
 Returns a list of the 20 latest messages. The list can optionally be started 
 from a specific id, and filtered by address. Returns undef if an error 
 occurred. The return list consists of objects of type WWW::Spam::ListItem, 
 which provide accessors to data B<id>, B<to>, B<from>, B<subject>.
 
-=item my @message = $la->B<message>( $id )
+=item @message = $la->B<message>( $id )
 
 Given a message id, fetches and returns the corresponding MIME message. It can 
 then be parsed by any MIME handler, like L<Email::MIME> or L<MIME::Parser>.  
 Returns undef if an error occurred.
 
-=item my $error = $la->B<error>
+=item $error = $la->B<error>
 
 Returns the error, if one occurred.
 
