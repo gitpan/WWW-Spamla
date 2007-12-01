@@ -23,7 +23,7 @@ while ( 1 ) {
             $item->subject;
     }
 
-    # Find any extra messages that occurred within the poll interval and are 
+    # Find any extra messages that occurred within the poll interval and are
     # already off the front page.
     if ( $max_id and $list[-1]->id > ( $last_id || $max_id ) + 1 ) {
         $last_id = $list[-1]->id;

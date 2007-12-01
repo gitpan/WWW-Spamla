@@ -1,5 +1,8 @@
 Revision history for WWW-Spamla
 
+0.04  Sat Dec 1 03:02:49 UTC 2007
+    - Used warnings for better kwalitee.
+
 0.03  Sun Sep 9 3:34:35 GMT 2007
     - Parsed response content_ref instead of content.
     - Added use strict to tests.

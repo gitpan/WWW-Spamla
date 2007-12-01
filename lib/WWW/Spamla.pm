@@ -1,13 +1,15 @@
 package WWW::Spamla;
 
 use strict;
+use warnings;
 use base qw( Class::Accessor::Fast );
 
 use LWP::UserAgent;
+use URI;
 use HTML::TableExtract;
 use HTML::TokeParser;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use constant DEBUG => $ENV{ WWW_SPAMLA_DEBUG } || 0;
 use constant BASE_URI => URI->new( 'http://spam.la/' );
@@ -15,13 +17,13 @@ use constant BASE_URI => URI->new( 'http://spam.la/' );
 __PACKAGE__->mk_ro_accessors( qw( error ) );
 
 sub new {
-    my ($class, %args) = @_;
+    my ($class, %params) = @_;
 
-    unless ( ref $args{ua} and $args{ua}->isa( q(LWP::UserAgent) ) ) {
-        $args{ua} = LWP::UserAgent->new( agent => __PACKAGE__.'/'.$VERSION );
+    unless ( ref $params{ua} and $params{ua}->isa( q(LWP::UserAgent) ) ) {
+        $params{ua} = LWP::UserAgent->new( agent => __PACKAGE__.'/'.$VERSION );
     }
 
-    return bless \%args, $class;
+    return bless \%params, $class;
 }
 
 BEGIN {
@@ -31,13 +33,13 @@ BEGIN {
 }
 
 sub list {
-    my ($self, %args) = @_;
+    my ($self, %params) = @_;
 
     my %fields;
-    if ( my $address = $args{address} ) {
+    if ( my $address = $params{address} ) {
         ($fields{f} = $address) =~ s/ \@spam\.la $ //x;
     }
-    if ( my $start_id = $args{start_id} ) {
+    if ( my $start_id = $params{start_id} ) {
         $fields{start_id} = $start_id;
     }
 
@@ -122,7 +124,7 @@ sub message {
         $self->{error} = q{Couldn't find headers};
         return;
     }
-    
+
     if ( $parser->get_tag( 'pre' ) ) {
         $msg .= $parser->get_text( '/pre' );
     }
@@ -144,7 +146,7 @@ __END__
 WWW::Spamla - interface to Spam.la
 
 =head1 SYNOPSIS
-    
+
     my $la = WWW::Spamla->new;
 
     my @list = $la->list( address => 'bubba' );
@@ -165,28 +167,28 @@ The C<WWW::Spamla> module provides an interface to the Spam.la website.
 
 =head1 METHODS
 
-=over 4
+=over
 
 =item $la = WWW::Spamla->B<new>
 
 =item $la = WWW::Spamla->B<new>( ua => $ua )
 
-Creates a new WWW::Spamla object. The constructor accepts an optional 
+Creates a new WWW::Spamla object. The constructor accepts an optional
 LWP::UserAgent derived object.
 
 =item @list = $la->B<list>
 
 =item @list = $la->B<list>( address => $address, start_id => $id )
 
-Returns a list of the 20 latest messages. The list can optionally be started 
-from a specific id, and filtered by address. Returns undef if an error 
-occurred. The return list consists of objects of type WWW::Spam::ListItem, 
+Returns a list of the 20 latest messages. The list can optionally be started
+from a specific id, and filtered by address. Returns undef if an error
+occurred. The return list consists of objects of type WWW::Spam::ListItem,
 which provide accessors to data B<id>, B<to>, B<from>, B<subject>.
 
 =item @message = $la->B<message>( $id )
 
-Given a message id, fetches and returns the corresponding MIME message. It can 
-then be parsed by any MIME handler, like L<Email::MIME> or L<MIME::Parser>.  
+Given a message id, fetches and returns the corresponding MIME message. It can
+then be parsed by any MIME handler, like L<Email::MIME> or L<MIME::Parser>.
 Returns undef if an error occurred.
 
 =item $error = $la->B<error>
@@ -201,9 +203,9 @@ L<http://spam.la/>
 
 =head1 REQUESTS AND BUGS
 
-Please report any bugs or feature requests to 
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WWW-Spamla>. I will be 
-notified, and then you'll automatically be notified of progress on your bug as 
+Please report any bugs or feature requests to
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=WWW-Spamla>. I will be
+notified, and then you'll automatically be notified of progress on your bug as
 I make changes.
 
 =head1 SUPPORT
@@ -214,7 +216,7 @@ You can find documentation for this module with the perldoc command.
 
 You can also look for information at:
 
-=over 4
+=over
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -238,7 +240,7 @@ L<http://search.cpan.org/dist/WWW-Spamla>
 
 Copyright (C) 2007 gray <gray at cpan.org>, all rights reserved.
 
-This library is free software; you can redistribute it and/or modify it under 
+This library is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.
 
 =head1 AUTHOR
